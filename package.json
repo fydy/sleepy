@@ -5,6 +5,10 @@
   "scripts": {
     "start": "node ./script/serve.js",
     "build": "node ./script/build.js",
+    "add": "node ./script/add.js",
+    "del": "node ./script/del.js",
+    "reset": "node ./script/reset.js",
+    "ci": "node ./script/ci.js",
     "test": "jest"
   },
   "repository": {

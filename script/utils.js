@@ -8,6 +8,8 @@ const writeJson = require("write-json");
 const dayjs = require("dayjs");
 const logger = require("./logger");
 
+exports.isProd = process.env.NODE_ENV === "production";
+
 exports.dataPath = function() {
   const paths = {};
   const dataDir = glob.sync(path.join(process.cwd(), "src/data/*"));
@@ -159,6 +161,6 @@ exports.postData = function(name) {
   }
   return {
     meta: meta,
-    post: postData.replace(reg, "").replace(/^\s+|\s+$/g, "")
+    post: postData.replace(reg, "").replace(/^\s+|\s+$/g, "").trim()
   };
 };

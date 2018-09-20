@@ -1,3 +1,5 @@
-const { readDb, writeDb, resetDb, readMeta, delMeta, updateMeta } = require('./script/utils');
+const { dataPath } = require('./script/utils');
 
-resetDb();
+const test = require(dataPath().config);
+
+console.log(test)
