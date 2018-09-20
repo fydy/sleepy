@@ -3,24 +3,7 @@ import { website } from "../../../data/config";
 import { getURLParameters, scrollDirection, relative, setTitle, creatPoster, scrollFixed, smoothScroll, isMobile } from "./utils";
 const { name } = getURLParameters();
 const relatedPost = website.post.relatedPost;
-import Highway from "@dogstudio/highway/build/es5/highway";
 
-class Renderer extends Highway.Renderer {
-  onEnter() {
-    console.log("About: onEnter");
-  }
-  onLeave() {
-    console.log("About: onLeave");
-  }
-  onEnterCompleted() {
-    console.log("About: onEnterCompleted");
-  }
-  onLeaveCompleted() {
-    console.log("About: onLeaveCompleted");
-  }
-}
-
-export default Renderer;
 const $header = document.querySelector('.header');
 const $page = document.querySelector('.post-page');
 const $title = document.querySelector(".post-page .post-header .title");
@@ -30,7 +13,6 @@ const $related = document.querySelector(".post-page .post-related");
 const $nav = document.querySelector(".post-page .post-nav");
 const $navList = document.querySelector(".post-page .post-nav .nav-list");
 
-
 const metaData = window.database.posts.find(item => item.name === name);
 setTitle(metaData.title);
 $title.innerHTML = metaData.title;
@@ -38,7 +20,7 @@ $mata.innerHTML = metaData.topic.split(',').map(item => {
   return `<a href="/archive.html?topic=${encodeURIComponent(item.trim())}" title="${item.trim()}" class="topic">${item.trim()}</a>`
 }).join('<span class="dot"></span>') + `<span class="dot"></span>` + `<span class="time" title="${metaData.creatDate}">发布于 ${relative(metaData.creatDate)}</span>`;
 
-import(/* webpackChunkName: "post" */ `../../../data/posts/${name}/post.md`)
+import(/* webpackChunkName: "post" */ `../../../data/posts/${name}.md`)
   .then(module => {
     const postData = module.default;
     setTimeout(() => {

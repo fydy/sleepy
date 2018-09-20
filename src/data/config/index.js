@@ -7,7 +7,8 @@ const config = {
   dev: {
     port: 3000,
     outputPath: path.join(process.cwd(), "./"),
-    publicPath: isProd ? "https://cdn.zhw-island.com/" : "/"
+    publicPath: isProd ? "https://cdn.zhw-island.com/" : "/",
+    asyncImport: false
   },
   website: {
     pageName(page){

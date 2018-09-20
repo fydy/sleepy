@@ -111,10 +111,14 @@ const webpackConfig = {
 };
 
 htmlList().forEach(item => {
+  if (!config.dev.asyncImport) {
+    Object.assign(webpackConfig.entry, item.chunk)
+  }
   webpackConfig.plugins.unshift(
     new HtmlWebpackPlugin({
       filename: item.filename,
       template: item.template,
+      chunks: config.dev.asyncImport ? [] : item.chunks,
       minify: isProd
         ? {
             removeComments: true,
