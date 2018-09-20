@@ -29,20 +29,25 @@ describe("Markdown to text", () => {
   });
 });
 
-describe("Check database", () => {
-  const { readDb, writeDb, resetDb, readMeta } = utils;
+describe.skip("Check database", () => {
+  const { readDb, writeDb, resetDb, readMeta, delMeta } = utils;
 
-  const db = readDb();
+  const cacheDb = readDb();
   resetDb();
 
   test("readDb", () => {
-    expect(typeof db).toBe('object');
-    expect(Array.isArray(db.posts)).toBeTruthy();
+    expect(typeof readDb()).toBe('object');
+    expect(Array.isArray(readDb().posts)).toBeTruthy();
   });
 
   test("readMeta", () => {
     expect(readMeta('hellow-world').name).toBe('hellow-world');
   });
 
-  writeDb(db)
+  test("delMeta", () => {
+    delMeta('hellow-world');
+    expect(readDb().posts.length).toBe(0);
+  });
+
+  writeDb(cacheDb);
 });

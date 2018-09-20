@@ -43,7 +43,7 @@ exports.mdToText = function(md) {
 };
 
 exports.readDb = function() {
-    return importFresh(exports.dataPath().database);
+    return importFresh(path.join(exports.dataPath().database, 'index.json'));
 };
 
 exports.writeDb = function(data) {
@@ -69,7 +69,17 @@ exports.resetDb = function() {
     });
 };
 
-exports.readMeta = function readMeta(name) {
+exports.readMeta = function(name) {
     const { posts } = exports.readDb();
     return posts.find(item => item.name === name) || {};
+};
+
+exports.delMeta = function(name) {
+    const db = exports.readDb();
+    const findItem = db.posts.find(item => item.name === name);
+    const findIndex = db.posts.indexOf(findItem);
+    if (findIndex > -1) {
+      db.posts.splice(findIndex, 1);
+      exports.writeDb(db);
+    }
 };

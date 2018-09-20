@@ -1,15 +1,3 @@
 {
-  "posts": [
-    {
-      "title": "Hellow World!",
-      "type": "",
-      "poster": "",
-      "topic": "hellow, world",
-      "sticky": false,
-      "name": "hellow-world",
-      "excerpt": "Hellow World!",
-      "link": "/post.html?name=hellow-world",
-      "creatDate": "2018-09-20 11:34:03"
-    }
-  ]
+  "posts": []
 }
