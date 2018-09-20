@@ -8,6 +8,7 @@ const Reload4Plugin = require("@prakriya/reload4-html-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 const FileManagerPlugin = require("filemanager-webpack-plugin");
+const MyWebpackPlugin = require('./MyWebpackPlugin');
 const autoprefixer = require("autoprefixer");
 const { themePath, dataPath, htmlList, beforeConfigCreate, cleanFiles } = require("./utils");
 const theme = themePath();
@@ -104,7 +105,8 @@ const webpackConfig = {
     new SimpleI18nWebpackPlugin({
       language: configPath,
       beforeCreate: beforeConfigCreate
-    })
+    }),
+    new MyWebpackPlugin()
   ]
 };
 
