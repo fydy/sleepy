@@ -3,13 +3,12 @@
   "version": "1.0.0",
   "description": "I am sleepy",
   "scripts": {
-    "start": "cross-env NODE_ENV=development node ./script/serve.js",
-    "build": "cross-env NODE_ENV=production node ./script/build.js",
-    "add": "node ./script/add.js",
-    "del": "node ./script/del.js",
-    "reset": "node ./script/reset.js",
-    "ci": "node ./script/ci.js",
-    "test": "jest"
+    "start": "cross-env NODE_ENV=development node ./src/script/serve.js",
+    "build": "cross-env NODE_ENV=production node ./src/script/build.js",
+    "add": "node ./src/script/add.js",
+    "del": "node ./src/script/del.js",
+    "reset": "node ./src/script/reset.js",
+    "ci": "node ./src/script/ci.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +28,6 @@
     "@prakriya/reload4-html-webpack-plugin": "^1.0.2",
     "@sindresorhus/slugify": "^0.3.0",
     "autoprefixer": "^9.1.5",
-    "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.2",
     "chalk": "^2.4.1",
     "cross-env": "^5.2.0",
@@ -44,7 +42,6 @@
     "html-webpack-plugin": "^3.2.0",
     "import-fresh": "^2.0.0",
     "inquirer": "^6.2.0",
-    "jest": "^23.6.0",
     "markdown-it": "^8.4.2",
     "markdownit-loader": "^2.0.0",
     "mini-css-extract-plugin": "^0.4.3",
