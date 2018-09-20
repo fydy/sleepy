@@ -59,15 +59,15 @@ exports.resetDb = function() {
   exports.writeDb({
     posts: [
       {
-        title: "Hello World!",
-        type: "",
-        poster: "",
-        topic: "hello, world",
-        sticky: false,
-        name: "hello-world",
-        excerpt: "Hello World!",
-        link: "/post.html?name=hello-world",
-        creatDate: dayjs().format("YYYY-MM-DD HH:mm:ss")
+        "title": "Hello World",
+        "type": "default",
+        "poster": "",
+        "topic": "hello, world",
+        "sticky": false,
+        "name": "hello-world",
+        "excerpt": "Welcome to Sleepy. This is your first post. Edit or delete it and start blogging!",
+        "link": "/post.html?name=hello-world",
+        "creatDate": dayjs().format("YYYY-MM-DD HH:mm:ss")
       }
     ]
   });

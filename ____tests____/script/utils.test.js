@@ -30,7 +30,7 @@ describe("Markdown to text", () => {
 });
 
 describe.skip("Check database", () => {
-  const { readDb, writeDb, resetDb, readMeta, delMeta } = utils;
+  const { readDb, writeDb, resetDb, readMeta, delMeta, updateMeta } = utils;
 
   const cacheDb = readDb();
   resetDb();
@@ -73,7 +73,7 @@ describe("Before config create", () => {
 
 describe("Read post meta", () => {
   const { postData } = utils;
-  console.log(postData('hello-world'))
+
   test("postData", () => {
     expect(postData('hello-world').meta.title).toBe('Hello World');
   });
