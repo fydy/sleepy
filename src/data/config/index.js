@@ -6,10 +6,13 @@ const config = {
   theme: "default",
   dev: {
     port: 3000,
-    outputPath: path.join(process.cwd(), "docs"),
+    outputPath: path.join(process.cwd(), isProd ? "./docs" : "./"),
     publicPath: isProd ? "https://cdn.zhw-island.com/" : "/"
   },
   website: {
+    pageName(page){
+      return page.replace('.html', '')
+    },
     seo: {
       title: "老赵茶馆",
       keywords: "老赵, 茶馆, 前端, 代码, 扯淡, 音乐, 电影, 分享",
