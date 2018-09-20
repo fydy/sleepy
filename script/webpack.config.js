@@ -16,7 +16,12 @@ module.exports = {
       {
         test: /\.js$/,
         use: {
-          loader: "babel-loader"
+          loader: "babel-loader",
+          options: {
+            babelrc: false,
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-syntax-dynamic-import"]
+          }
         }
       }
     ]

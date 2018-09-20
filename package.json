@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "I am sleepy",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-serve --config ./webpack.config.js --open",
-    "build": "cross-env NODE_ENV=production webpack"
+    "start": "node ./script/serve.js",
+    "build": "node ./script/build.js"
   },
   "repository": {
     "type": "git",
