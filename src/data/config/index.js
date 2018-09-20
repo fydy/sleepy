@@ -1,3 +1,8 @@
 module.exports = {
-    theme: 'default'
+    theme: 'default',
+    website: {
+        post: {
+            excerpt: 120
+        }
+    }
 }
