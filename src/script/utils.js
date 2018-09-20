@@ -126,10 +126,11 @@ exports.updateMeta = function updateMeta(name, creat = true) {
 };
 
 exports.cleanFiles = function() {
-  const files = glob.sync(path.join(process.cwd(), "docs/*"));
-  return files.filter(item => {
-    return path.basename(item) !== "CNAME";
+  const htmlFile = glob.sync(path.join(process.cwd(), "*.html"));
+  const staticFile = glob.sync(path.join(process.cwd(), 'static', '*')).filter(item => {
+    return path.basename(item) !== 'img';
   });
+  return [...htmlFile, ...staticFile];
 };
 
 exports.beforeConfigCreate = function(config) {
