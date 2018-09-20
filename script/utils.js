@@ -6,80 +6,159 @@ const markdownit = require("markdown-it")();
 const he = require("he");
 const writeJson = require("write-json");
 const dayjs = require("dayjs");
+const logger = require("./logger");
 
 exports.dataPath = function() {
-    const paths = {}
-    const dataDir = glob.sync(path.join(process.cwd(), "src/data/*"));
-    dataDir.forEach(item => paths[path.basename(item)] = item);
-    return paths;
+  const paths = {};
+  const dataDir = glob.sync(path.join(process.cwd(), "src/data/*"));
+  dataDir.forEach(item => (paths[path.basename(item)] = item));
+  return paths;
 };
 
 exports.themePath = function() {
-    const paths = {}
-    const config = importFresh(exports.dataPath().config);
-    const themeDir = glob.sync(path.join(process.cwd(), "src/theme", config.theme, '*'));
-    themeDir.forEach(item => paths[path.basename(item)] = item);
-    return paths;
+  const paths = {};
+  const config = importFresh(exports.dataPath().config);
+  const themeDir = glob.sync(
+    path.join(process.cwd(), "src/theme", config.theme, "*")
+  );
+  themeDir.forEach(item => (paths[path.basename(item)] = item));
+  return paths;
 };
 
 exports.htmlList = function() {
-    const pages = exports.themePath().pages;
-    return glob.sync(path.join(pages, '*.html')).map(item => {
-      const filename = path.basename(item).toLowerCase();
-      return {
-        filename: filename,
-        template: path.resolve(item)
-      };
-    });
+  const pages = exports.themePath().pages;
+  return glob.sync(path.join(pages, "*.html")).map(item => {
+    const filename = path.basename(item).toLowerCase();
+    return {
+      filename: filename,
+      template: path.resolve(item)
+    };
+  });
 };
 
 exports.mdToText = function(md) {
-    const truncateString = (str, num) => str.length > num ? str.slice(0, num > 3 ? num - 3 : num) + "..." : str;
-    const config = importFresh(exports.dataPath().config);
-    const htmlData = markdownit.render(md);
-    const stripedHtml = htmlData.replace(/<[^>]*>/g, "").replace(/[\r\n]/g, "");
-    const decodedStripedHtml = he.decode(stripedHtml);
-    return truncateString(decodedStripedHtml, config.website.post.excerpt);
+  const truncateString = (str, num) =>
+    str.length > num ? str.slice(0, num > 3 ? num - 3 : num) + "..." : str;
+  const config = importFresh(exports.dataPath().config);
+  const htmlData = markdownit.render(md);
+  const stripedHtml = htmlData.replace(/<[^>]*>/g, "").replace(/[\r\n]/g, "");
+  const decodedStripedHtml = he.decode(stripedHtml);
+  return truncateString(decodedStripedHtml, config.website.post.excerpt);
 };
 
 exports.readDb = function() {
-    return importFresh(path.join(exports.dataPath().database, 'index.json'));
+  return importFresh(path.join(exports.dataPath().database, "index.json"));
 };
 
 exports.writeDb = function(data) {
-    const dbPath = path.join(exports.dataPath().database, 'index.json');
-    writeJson.sync(dbPath, data);
+  const dbPath = path.join(exports.dataPath().database, "index.json");
+  writeJson.sync(dbPath, data);
 };
 
 exports.resetDb = function() {
-    exports.writeDb({
-        "posts": [
-            {
-                "title": "Hellow World!",
-                "type": "",
-                "poster": "",
-                "topic": "hellow, world",
-                "sticky": false,
-                "name": "hellow-world",
-                "excerpt": "Hellow World!",
-                "link": "/post.html?name=hellow-world",
-                "creatDate": dayjs().format("YYYY-MM-DD HH:mm:ss")
-            }
-        ]
-    });
+  exports.writeDb({
+    posts: [
+      {
+        title: "Hello World!",
+        type: "",
+        poster: "",
+        topic: "hello, world",
+        sticky: false,
+        name: "hello-world",
+        excerpt: "Hello World!",
+        link: "/post.html?name=hello-world",
+        creatDate: dayjs().format("YYYY-MM-DD HH:mm:ss")
+      }
+    ]
+  });
 };
 
 exports.readMeta = function(name) {
-    const { posts } = exports.readDb();
-    return posts.find(item => item.name === name) || {};
+  const { posts } = exports.readDb();
+  return posts.find(item => item.name === name) || {};
 };
 
 exports.delMeta = function(name) {
-    const db = exports.readDb();
+  const db = exports.readDb();
+  const findItem = db.posts.find(item => item.name === name);
+  const findIndex = db.posts.indexOf(findItem);
+  if (findIndex > -1) {
+    db.posts.splice(findIndex, 1);
+    exports.writeDb(db);
+  }
+};
+
+exports.updateMeta = function updateMeta(name, creat = true) {
+  const config = importFresh(exports.dataPath().config);
+  const db = exports.readDb();
+  const { meta, post } = exports.postData(name);
+  const excerpt = exports.mdToText(post);
+  const currentDate = dayjs().format("YYYY-MM-DD HH:mm:ss");
+  const metaData = {
+    ...meta,
+    name: name,
+    excerpt: excerpt,
+    link: "/post.html?name=" + name
+  };
+  if (metaData.poster) {
+    metaData.poster =
+      metaData.poster.charAt(0) === "/"
+        ? metaData.poster.slice(1)
+        : metaData.poster;
+    metaData.poster = config.dev.publicPath + metaData.poster;
+  }
+  if (creat) {
+    metaData.creatDate = currentDate;
+    db.posts.unshift(metaData);
+  } else {
     const findItem = db.posts.find(item => item.name === name);
     const findIndex = db.posts.indexOf(findItem);
     if (findIndex > -1) {
-      db.posts.splice(findIndex, 1);
-      exports.writeDb(db);
+      db.posts[findIndex] = { ...findItem, ...metaData };
+    } else {
+      updateMeta(name, true);
+      return;
     }
+  }
+  exports.writeDb(db);
+};
+
+exports.cleanFiles = function() {
+  const files = glob.sync(path.join(process.cwd(), "docs/*"));
+  return files.filter(item => {
+    return path.basename(item) !== "CNAME";
+  });
+};
+
+exports.beforeConfigCreate = function(config) {
+  config.website.page = {};
+  glob.sync(path.join(exports.dataPath().pages, "*.md")).forEach(item => {
+    const filename = path
+      .basename(item)
+      .toLowerCase()
+      .replace(".md", "");
+    const pageData = fs.readFileSync(item, "utf-8");
+    const htmlData = markdownit.render(pageData);
+    config.website.page[filename] = htmlData;
+  });
+  return config;
+};
+
+exports.postData = function(name) {
+  const reg = /<!---([\s\S]*?)-->/;
+  const filePath = path.join(exports.dataPath().posts, `${name}.md`);
+  const postData = fs.readFileSync(filePath, "utf-8");
+  let meta;
+  try {
+    meta = JSON.parse(reg.exec(postData)[1]);
+  } catch (error) {
+    logger.fatal(
+      "It seems that your markdown file contains illegal mate data in: " +
+        filePath
+    );
+  }
+  return {
+    meta: meta,
+    post: postData.replace(reg, "").replace(/^\s+|\s+$/g, "")
+  };
 };

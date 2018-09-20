@@ -51,3 +51,30 @@ describe.skip("Check database", () => {
 
   writeDb(cacheDb);
 });
+
+describe("Clean output file", () => {
+  const { cleanFiles } = utils;
+
+  test("cleanFiles", () => {
+    expect(Array.isArray(cleanFiles())).toBeTruthy();
+  });
+});
+
+describe("Before config create", () => {
+  const { beforeConfigCreate } = utils;
+  
+  test("beforeConfigCreate", () => {
+    const config = beforeConfigCreate({
+      website: {}
+    });
+    expect(Object.keys(config.website).length).toBeGreaterThan(0);
+  });
+});
+
+describe("Read post meta", () => {
+  const { postData } = utils;
+  console.log(postData('hello-world'))
+  test("postData", () => {
+    expect(postData('hello-world').meta.title).toBe('Hello World');
+  });
+});
